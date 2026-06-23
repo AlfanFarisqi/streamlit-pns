@@ -42,7 +42,11 @@ def generate_insight(iklan, diskon):
 
 #streamlit UI
 
-st.title("Simulator Kebijakan Keuntungan Toko")
+st.markdown("""
+<h1 style='text-align: center;'>
+Simulator Kebijakan Keuntungan Toko
+</h1>
+""", unsafe_allow_html=True)
 
 # --- SIDEBAR: Variabel Kontrol ---
 st.sidebar.header("Tuas Kebijakan (Intervensi)")
@@ -58,9 +62,50 @@ st.sidebar.text("Alfan Pratama Farisqi\n2313020192\nkelas 3A")
 hasil_pred, delta = run_simulation(iklan_slider, diskon_slider)
 
 # --- UI: Tampilkan Hasil ---
-col1, col2 = st.columns(2)
-col1.metric("Prediksi Keuntungan", f"Rp {hasil_pred:.2f} Jt", f"{delta:.2f} Jt")
-col2.write(f"Skenario ini menghasilkan perubahan sebesar {delta:.2f} Juta dibandingkan kondisi baseline.")
+st.markdown("""
+<style>
+.prediksi-card {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.prediksi-title {
+    font-size: 18px;
+    font-weight: 500;
+    opacity: 0.9;
+    margin-bottom: 10px;
+}
+
+.prediksi-value {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.prediksi-delta {
+    display: inline-block;
+    background-color: rgba(255,255,255,0.15);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: 600;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown(f"""
+<div class="prediksi-card">
+    <div class="prediksi-title">Prediksi Keuntungan</div>
+    <div class="prediksi-value">Rp {hasil_pred:.2f} Jt</div>
+    <div class="prediksi-delta">
+        {'▲' if delta >= 0 else '▼'} {delta:.2f} Jt dari baseline
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # Visualisasi Perbandingan
 data_plot = pd.DataFrame({
